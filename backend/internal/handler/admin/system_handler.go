@@ -83,9 +83,12 @@ func (h *SystemHandler) CheckUpdates(c *gin.Context) {
 // PerformUpdate downloads and applies the update
 // POST /api/v1/admin/system/update
 func (h *SystemHandler) PerformUpdate(c *gin.Context) {
-	// 自建补丁版（sub2api-shenle）：禁用在线更新，防止补丁被官方版本覆盖。
-	response.Error(c, http.StatusForbidden, "updates are disabled on this build (sub2api-shenle)")
-	return
+	// 自建补丁版（sub2api-shenle）：生产构建禁用在线更新，防止补丁被官方版本覆盖；
+	// unit 测试构建（-tags=unit）保持上游原逻辑，见 updatesDisabledOnShenle。
+	if updatesDisabledOnShenle() {
+		response.Error(c, http.StatusForbidden, "updates are disabled on this build (sub2api-shenle)")
+		return
+	}
 	operationID := buildSystemOperationID(c, "update")
 	payload := gin.H{"operation_id": operationID}
 	executeAdminIdempotentJSON(c, "admin.system.update", payload, service.DefaultSystemOperationIdempotencyTTL(), func(ctx context.Context) (any, error) {

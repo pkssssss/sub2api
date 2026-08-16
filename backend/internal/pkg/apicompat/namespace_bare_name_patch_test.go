@@ -5,8 +5,8 @@ import "testing"
 func TestNamespaceToolByBareName(t *testing.T) {
 	tools := map[string]NamespacedToolName{
 		"mcp__sequential_thinking__sequentialthinking": {Namespace: "mcp__sequential_thinking", Name: "sequentialthinking"},
-		"mcp__codegraph__codegraph_explore":             {Namespace: "mcp__codegraph", Name: "codegraph_explore"},
-		"mcp__gopls__go_diagnostics":                    {Namespace: "mcp__gopls", Name: "go_diagnostics"},
+		"mcp__codegraph__codegraph_explore":            {Namespace: "mcp__codegraph", Name: "codegraph_explore"},
+		"mcp__gopls__go_diagnostics":                   {Namespace: "mcp__gopls", Name: "go_diagnostics"},
 	}
 	// 唯一裸名 → 还原
 	ns, ok := NamespaceToolByBareName(tools, "sequentialthinking")
